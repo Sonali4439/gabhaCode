@@ -5,9 +5,9 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gabha_app1/screens/registration/registrationCommanForm.dart';
-import 'package:gabha_app1/screens/registration/wrapper/PayloadUserLogin.dart';
+import 'package:gabha_app1/screens/registration/welcomeScreen.dart';
 import 'package:gabha_app1/screens/registration/wrapper/RequestUserLogin.dart';
-import 'package:gabha_app1/screens/registration/wrapper/ResponseUserLogin.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseLogin.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +16,7 @@ import '../../constant/CustomElevatedButton.dart';
 import '../../constant/CustomTextButton.dart';
 import '../../constant/TextRubikRegular.dart';
 import '../../core/Core.dart';
+import '../../core/SharedPrefrenceSessionManager.dart';
 
 class ActivityOtpScreen extends StatefulWidget {
   String mobileNum;
@@ -89,7 +90,7 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
     print(requestUserLogin.mobileNo);
     print(requestUserLogin.otp);
 
-    Response<ResponseUserLogin> response = await core.loginUser(requestUserLogin);
+    Response<ResponseLogin> response = await core.loginUser(requestUserLogin);
     print(response);
     print("----------------------");
       print(response.body?.status?.statusCode);
@@ -99,10 +100,25 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
       print("login sucesss--------------");
       SharedPreferences pref = await _prefs;
       pref.setString("gabha_token", jsonEncode("${response.body?.payload?.token}")).then((value) => print('User Login Value Saved : $value'));
+      print("${response.body?.payload?.token}");
+      print("@@@@@@@@@@@@@@@@");
+
+      if(response.body?.getPayload()?.userList != null){
+
+        core.updateSession(response.body?.getPayload()?.token, response.body?.getPayload()?.userList);
+
+        Navigator.push(context,
+          MaterialPageRoute(
+            builder: (context) => WelcomeScreen(),
+          ),
+        );
+      }
+
+
      /* Future.delayed(const Duration(seconds: 2), () {
         Navigator.push(context,
           MaterialPageRoute(
-            builder: (context) => RegistrationCommanForm(),
+            builder: (context) => WelcomeScreen(),
           ),
         );
       });*/
@@ -149,7 +165,7 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
                             "Please enter the OTP recieved at  ${widget.mobileNum}",
                             "left",
                             18.0,
-                            appColors.subHeadingColor,
+                            appColors.hintHeadingColor,
                             false),
                       ),
 

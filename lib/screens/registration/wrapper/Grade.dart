@@ -1,4 +1,5 @@
 
+import 'package:gabha_app1/screens/registration/wrapper/Board.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Grade.g.dart';
@@ -9,6 +10,12 @@ class Grade {
 
   @JsonKey(name:"grade")
   String? grade;
+
+  @JsonKey(name:"_id")
+  String? gradeId;
+
+  @JsonKey(name:"board")
+  Board? board;
 
   Grade();
 

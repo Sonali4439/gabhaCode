@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:gabha_app1/core/SharedPrefrenceSessionManager.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Board.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
 import 'package:gabha_app1/screens/registration/wrapper/RequestAddUser.dart';
 import 'package:gabha_app1/screens/registration/wrapper/ResponseGetAllBoard.dart';
 import 'package:gabha_app1/screens/registration/wrapper/ResponseGetAllGradeByBoard.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseLogin.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseRegistration.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constant/AppColors.dart';
 import '../../constant/CustomTextButton.dart';
@@ -15,9 +22,10 @@ import '../../core/Core.dart';
 import 'annualMembershipScreen.dart';
 
 class StudentRegistrationForm extends StatefulWidget {
-  String fullName,mobile,email,modeOfCommunication,isParent;
+  String fullName,mobile,email,modeOfCommunication;
+  final bool? isParents;
   StudentRegistrationForm({required this.fullName,required this.mobile,required this.email,
-   required this.modeOfCommunication, required this.isParent});
+   required this.modeOfCommunication, required this.isParents});
  // const StudentRegistrationForm({Key? key}) : super(key: key);
 
   @override
@@ -41,14 +49,14 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
   String? dropDownBoard = "Select";
 
   List<Grade>? gradeList = [];
-  Board? selectedGrade;
+  Grade? selectedGrade;
   String? dropDownGrade = "Select";
 
-  List<String>? gradeListData=['Select'];
+  // List<String>? gradeListData=['Select'];
 
 
 
-  TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerChildName = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -68,14 +76,53 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     getAllBoard();
   }
 
-  void addProgram() async {
-
+  void addUser() async {
+    print("ADDDDDDDDDDDDDd");
     RequestAddUser requestAddUser = RequestAddUser();
     requestAddUser.name = widget.fullName;
     requestAddUser.mobileNo = widget.mobile;
     requestAddUser.email = widget.email;
     requestAddUser.modeOfCommunication = widget.modeOfCommunication;
-   /* requestAddUser.isParent = widget.isParent;*/
+    requestAddUser.isParent = widget.isParents;
+    requestAddUser.childName=controllerChildName.text;
+    requestAddUser.childGradeId=selectedGrade!.gradeId;
+
+    /*if(widget.isParents ==true)
+      {
+        requestAddUser.gradeId="6447c348436f5f4df705dbd3";
+      }else{
+      requestAddUser.childGradeId="642fab761045f4c64aaf3856";
+    }*/
+
+    print(requestAddUser.name);
+    print(requestAddUser.mobileNo);
+    print(requestAddUser.isParent);
+    print(requestAddUser.gradeId);
+
+    Response<ResponseLogin> response = await core.addUser(requestAddUser);
+
+    if (response.body?.status?.statusCode == 0) {
+
+      if(response.body?.getPayload()?.userList != null){
+
+        core.updateSession(response.body?.getPayload()?.token, response.body?.getPayload()?.userList);
+
+        debugPrint(response.body?.getPayload()?.userList!.id);
+        debugPrint("user id is-----------------");
+        setState(() {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  AnnualMembershipScreen(userId :"${response.body?.getPayload()?.userList!.id}",flag:"Registration")),
+          );
+        });
+      }
+
+
+    }
+
+
+
 
   }
 
@@ -99,19 +146,29 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
 
   //get all grade by borad
   void getAllGradeByBoard(String boardId) async {
-    print('----id---${boardId}');
-    Response<ResponseGetAllGradeByBoard> response = await core.getAllGradeByBoard(boardId);
+    debugPrint('----id---${boardId}');
+    Response<ResponseGetStandard> response = await core.getAllGradeByBoard(boardId);
     if (response.body?.status?.statusCode == 0) {
-      print("graddddddddddddddddddd");
-      gradeListData= [];
-      gradeListData!.add('Select');
+      gradeList =[];
+      Grade defaultGrade = Grade();
+      defaultGrade.gradeId = "";
+      defaultGrade.grade = "Select";
+      gradeList!.add(defaultGrade);
+
+
       setState(() {
         response.body?.payload?.asMap().forEach((key, value) {
-          if(gradeListData!.contains(value) == false){
-            gradeListData!.add(value);
-          }
+          gradeList!.add(value);
         });
       });
+
+        gradeList!.asMap().forEach((key, value) {
+          print('----gradeeeeee---${key}===${value.grade}');
+        });
+
+
+
+
     }
   }
 
@@ -123,7 +180,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     print("mobile-------${widget.mobile}");
     print("email-------${widget.email}");
     print("modeOfcomm-------${widget.modeOfCommunication}");
-    print("isparent-------${widget.isParent}");
+    print("isparent-------${widget.isParents}");
 
 
 
@@ -168,14 +225,14 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                     padding: const EdgeInsets.only(top: 5),
                     child: Center(
                       child: TextRubikRegular(
-                         ( widget.isParent == "true")
+                         widget.isParents ==true
                         ? " Add Your Childs Details" : "Fill Your Details",
                            "left",
                           16.0, appColors.hintHeadingColor, false),
                     ),
                   ),
 
-              (widget.isParent == "true")
+                  widget.isParents ==true
                  ? Padding(
                     padding:
                     const EdgeInsets.only(top: 40),
@@ -184,7 +241,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                         inputValue: "Enter Full Name of your Child",
                         keyboardType: TextInputType.text,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: controllerName,
+                        controller: controllerChildName,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Enter Full Name of your Child Here";
@@ -310,29 +367,28 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                       ),
                       value: dropDownGrade,
                       onChanged: (newValue) {
-                        gradeListData!.asMap().forEach((key, value) {
-                          if(value == newValue){
+                        gradeList!.asMap().forEach((key, value) {
+                          if (value.grade == newValue) {
                             setState(() {
-                              dropDownGrade = newValue?? "";
+                              selectedGrade = value;
+                              dropDownGrade = newValue ?? "";
                             });
                           }
                         });
                       },
-                      items:  gradeListData!.map((item) {
+                      items:
+                      gradeList!.map((item) {
                         return DropdownMenuItem(
-                          value: item,
-                          child: Text('${item}'),
+                          value: item.grade,
+                          child: Text('${item.grade}'),
                         );
                       }).toList(),
                       validator: (value) {
-                        if (value == null) return "Please select class";
+                        if (value == "Select") return "Please select grade";
                         return null;
                       },
                     ),
                   ),
-
-
-
 
 
 
@@ -353,7 +409,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
               padding: const EdgeInsets.only(left: 25,right: 25,bottom: 20),
               child: Center(
                 child: TextRubikRegular(
-                    ( widget.isParent == "true")
+                    ( widget.isParents == "true")
                         ? " Note : You can always add a New Child later in your Profile" : "",
                     "center",
                     16.0, appColors.hintHeadingColor, false),
@@ -362,15 +418,18 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
             CustomTextButton(
               buttonColor: appColors.mainHeadingColor,
               onPressed: () {
+                print("button presss");
+               // addUser();
                 if (formKey.currentState!.validate()) {
-                  if (formKey.currentState!.validate()) {
-                     Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                          builder: (context) => const AnnualMembershipScreen()),
-                    );
+                    addUser();
+
                 }
-                }
+              /*  addUser();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AnnualMembershipScreen()),
+                );*/
               },
               title: "Save & Proceed",
               paddingSize: 15,

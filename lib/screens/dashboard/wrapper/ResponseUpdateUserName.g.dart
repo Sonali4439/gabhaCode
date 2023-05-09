@@ -1,21 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ResponseUserLogin.dart';
+part of 'ResponseUpdateUserName.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ResponseUserLogin _$ResponseUserLoginFromJson(Map<String, dynamic> json) =>
-    ResponseUserLogin()
+ResponseUpdateUserName _$ResponseUpdateUserNameFromJson(
+        Map<String, dynamic> json) =>
+    ResponseUpdateUserName()
       ..status = json['status'] == null
           ? null
           : ServerStatus.fromJson(json['status'] as Map<String, dynamic>)
       ..payload = json['payload'] == null
           ? null
-          : PayloadUserLogin.fromJson(json['payload'] as Map<String, dynamic>);
+          : PayloadUpdateUserName.fromJson(
+              json['payload'] as Map<String, dynamic>);
 
-Map<String, dynamic> _$ResponseUserLoginToJson(ResponseUserLogin instance) =>
+Map<String, dynamic> _$ResponseUpdateUserNameToJson(
+        ResponseUpdateUserName instance) =>
     <String, dynamic>{
       'status': instance.status,
       'payload': instance.payload,

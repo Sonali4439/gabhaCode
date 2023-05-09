@@ -18,6 +18,14 @@ class RequestAddUser {
   String? email;
   @JsonKey(name:"mode_of_communication")
   String? modeOfCommunication;
+  @JsonKey(name:"child_name")
+  String? childName;
+  @JsonKey(name:"child_grade_id")
+  String? childGradeId;
+  @JsonKey(name:"grade_id")
+  String? gradeId;
+
+
 
 
   RequestAddUser();

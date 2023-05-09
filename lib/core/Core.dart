@@ -1,12 +1,26 @@
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetSubCategory.dart';
+import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestAddChild.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserNameUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateUserName.dart';
+import 'package:gabha_app1/screens/home/wrapper/ResponseGetChild.dart';
+import 'package:gabha_app1/screens/registration/wrapper/RequestAddSubscription.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseAddUserSubscription.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseAnnualMembership.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseRegistration.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screens/registration/wrapper/RequestAddUser.dart';
 import '../screens/registration/wrapper/RequestUserLogin.dart';
 import '../screens/registration/wrapper/ResponseGetAllBoard.dart';
 import '../screens/registration/wrapper/ResponseGetAllGradeByBoard.dart';
-import '../screens/registration/wrapper/ResponseUserLogin.dart';
+import '../screens/registration/wrapper/ResponseLogin.dart';
+import '../screens/registration/wrapper/UserList.dart';
 import 'Server.dart';
 import 'SharedPrefrenceSessionManager.dart';
 
@@ -18,7 +32,7 @@ import 'package:chopper/src/response.dart' as ChopperResponse;
 
 class Core{
   SharedPreferences? prefs;
-  // User? currentUser;
+  UserList? currentUser;
   String? token;
   String? userFirebaseToken ;
   int reward = 10;
@@ -62,44 +76,76 @@ class Core{
     //     fontSize: 16.0);
   }
 
- /* void updateSession(String? token, User? user) {
+  void updateSession(String? token, UserList? user) {
     PreferenceUtils.init();
-    PreferenceUtils.setString("incent_company_admin_token", token!);
-     _storeSession(token, user!);
+    PreferenceUtils.setString("gabha_token", token!);
+    PreferenceUtils.setString("gabha_user_id", user!.id.toString());
+    PreferenceUtils.setString("gabha_user_name", user.useName.toString());
+    PreferenceUtils.setString("gabha_email", user.emailID.toString());
+    PreferenceUtils.setString("gabha_mobile", user.mobileNumber.toString());
+    PreferenceUtils.setString("gabha_isParent", user.isParent.toString());
+    PreferenceUtils.setString("gabha_modeOfCommunication", user.modeOfCommunication.toString());
+    // PreferenceUtils.setString("gabha_user_image", user..toString());
+    PreferenceUtils.setString("grade_id", user.grade!.gradeId.toString());
+    PreferenceUtils.setString("board_id", user.grade!.board!.boardId.toString());
+    PreferenceUtils.setString("grade_name", user.grade!.grade.toString());
+    PreferenceUtils.setString("board_name", user.grade!.board!.boardShortName.toString());
+    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());
+     _storeSession(token, user);
   }
 
-  void _storeSession(String token, User user) async {
+  void _storeSession(String token, UserList user) async {
     PreferenceUtils.init();
     currentUser = user;
     token = token;
-    PreferenceUtils.setString("incent_company_admin_name", user.yourName.toString());
-    PreferenceUtils.setString("incent_company_admin_email", user.emailId.toString());
-    PreferenceUtils.setString("incent_company_admin_mobile", user.mobileNo.toString());
-    PreferenceUtils.setBool("incent_company_admin_is_set_password", user.isSetPassword ?? false);
-
+    PreferenceUtils.setString("gabha_user_id", user.id.toString());
+    PreferenceUtils.setString("gabha_user_name", user.useName.toString());
+    PreferenceUtils.setString("gabha_email", user.emailID.toString());
+    PreferenceUtils.setString("gabha_mobile", user.mobileNumber.toString());
+    PreferenceUtils.setString("gabha_isParent", user.isParent.toString());
+    PreferenceUtils.setString("gabha_modeOfCommunication", user.modeOfCommunication.toString());
+   // PreferenceUtils.setString("gabha_user_image", user..toString());
+    PreferenceUtils.setString("grade_id", user.grade!.gradeId.toString());
+    PreferenceUtils.setString("board_id", user.grade!.board!.boardId.toString());
+    PreferenceUtils.setString("grade_name", user.grade!.grade.toString());
+    PreferenceUtils.setString("board_name", user.grade!.board!.boardShortName.toString());
+    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());
   }
 
   logout() async {
     PreferenceUtils.init();
-    PreferenceUtils.remove("incent_company_admin_token");
-    PreferenceUtils.remove("incent_company_admin_name");
-    PreferenceUtils.remove("incent_company_admin_email");
-    PreferenceUtils.remove("incent_company_admin_mobile");
-    PreferenceUtils.remove("incent_company_admin_is_set_password");
+    PreferenceUtils.remove("gabha_token");
+    PreferenceUtils.remove("gabha_user_id");
+    PreferenceUtils.remove("gabha_user_name");
+    PreferenceUtils.remove("gabha_email");
+    PreferenceUtils.remove("gabha_mobile");
+    PreferenceUtils.remove("gabha_isParent");
+    PreferenceUtils.remove("grade_id");
+    PreferenceUtils.remove("board_id");
+    PreferenceUtils.remove("grade_name");
+    PreferenceUtils.remove("board_name");
+    PreferenceUtils.remove("board_full_name");
+
     currentUser = null;
-  }*/
+  }
 
 
   Future<String?> getToken() async {
     PreferenceUtils.init();
-    return PreferenceUtils.getString("incent_company_admin_token");
+    return PreferenceUtils.getString("gabha_token");
   }
 
   Future<bool> isSetPassword() async {
     PreferenceUtils.init();
-    return PreferenceUtils.getBool("incent_company_admin_is_set_password");
+    return PreferenceUtils.getBool("gabha_is_set_password");
   }
 
+  bool isUserLoggedIn() {
+    print("core token==${token}");
+    PreferenceUtils.init();
+    print("token====${PreferenceUtils.getString("gabha_token")}");
+    return null != token;
+  }
 
   //new code v2
  /* User? getCurrentUser() {
@@ -198,7 +244,7 @@ class Core{
 
 
   // user -4- userLogin
-  Future<ChopperResponse.Response<ResponseUserLogin>> loginUser(RequestUserLogin request) {
+  Future<ChopperResponse.Response<ResponseLogin>> loginUser(RequestUserLogin request) {
     return server.loginUser(request);
   }
 
@@ -207,10 +253,68 @@ class Core{
     return server.getAllBoard();
   }
 
+  //user- 1-adduser
+  Future<ChopperResponse.Response<ResponseLogin>> addUser(RequestAddUser request) {
+    return server.addUser(request);
+  }
+
+  //user- 6-addUserSubscription
+  Future<ChopperResponse.Response<ResponseAddUserSubscription>> addSubscription(RequestAddSubscription request) {
+    return server.addSubscription(request);
+  }
+
+  //user- 5-addChildUserByUser
+  Future<ChopperResponse.Response<ResponseRegistration>> addChild(RequestAddChild request) {
+    return server.addChild("Bearer ${PreferenceUtils.getString("gabha_token")}",request);
+  }
+
+
   //master -13-getAllGradeByBoard
-  Future<ChopperResponse.Response<ResponseGetAllGradeByBoard>> getAllGradeByBoard(String boardId) {
+  Future<ChopperResponse.Response<ResponseGetStandard>> getAllGradeByBoard(String boardId) {
     return server.getAllGradeByBoard(boardId);
   }
+
+  //master -23-getSubscription
+  Future<ChopperResponse.Response<ResponseAnnualMembership>> getSubscription(String name,int skip,int limit) {
+    return server.getSubscription(name,skip,limit);
+  }
+
+  //user- 2-updateUSer
+  Future<ChopperResponse.Response<ResponseLogin>> updateUser(RequestUserUpdate request) {
+    return server.updateUser("Bearer ${PreferenceUtils.getString("gabha_token")}",request);
+  }
+
+  //user- 11-updateChildUserName
+  Future<ChopperResponse.Response<ResponseUpdateUserName>> updateUserName(RequestUserNameUpdate request) {
+    return server.updateUserName("Bearer ${PreferenceUtils.getString("gabha_token")}",request);
+  }
+
+  //17-caterogy -getCategoryByBoardAndGradeAndUserToken  (user APi)
+  Future<ChopperResponse.Response<ResponseSection>> getCategoryByBoardAndGradeAndUserToken(String boardId,String gradeId,int skip,int limit) {
+    print('hiii------${PreferenceUtils.getString("gabha_token")}');
+    return server.getCategoryByBoardAndGradeAndUserToken("Bearer ${PreferenceUtils.getString("gabha_token")}",boardId,gradeId,skip,limit);
+  }
+
+  //18-caterogy -getSubcategoryByCategoryBoardAndGrade  (user APi)
+  Future<ChopperResponse.Response<ResponseGetSubCategory>> getSubcategoryByCategoryBoardAndGrade(String boardId,String gradeId,String categoryId,int skip,int limit) {
+    print('hiii------${PreferenceUtils.getString("gabha_token")}');
+    return server.getSubcategoryByCategoryBoardAndGrade("Bearer ${PreferenceUtils.getString("gabha_token")}",boardId,gradeId,categoryId,skip,limit);
+  }
+
+  //10-user-getChildUserList
+  Future<ChopperResponse.Response<ResponseGetChild>> getChildUserList() {
+    return server.getChildUserList("Bearer ${PreferenceUtils.getString("gabha_token")}");
+  }
+
+  //7-user -getUserSubscription
+  Future<ChopperResponse.Response<ResponseAddUserSubscription>> getSubscriptionByUser(String childId) {
+    return server.getSubscriptionByUser("Bearer ${PreferenceUtils.getString("gabha_token")}",childId);
+  }
+
+
+
+
+
 
 
 

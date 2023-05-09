@@ -33,170 +33,175 @@ class _ActivityMobileScreenState extends State<ActivityMobileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child:
-        Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //mobile text
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 40, 10, 0),
-                  child: TextRubikRegular("Mobile Number", "left", 22.0,
-                      appColors.mainHeadingColor, true),
-                ),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child:
+          Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //mobile text
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 40, 10, 0),
+                    child: TextRubikRegular("Mobile Number", "left", 22.0,
+                        appColors.mainHeadingColor, true),
+                  ),
 
-                //hint text
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 10, 30),
-                  child: TextRubikRegular("Please enter your mobile no. ",
-                      "left", 18.0, appColors.subHeadingColor, false),
-                ),
+                  //hint text
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 10, 30),
+                    child: TextRubikRegular("Please enter your mobile no. ",
+                        "left", 18.0, appColors.hintHeadingColor, false),
+                  ),
 
-                // mobile text field
+                  // mobile text field
 
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: errorMobile == false
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: errorMobile == false
+                                ? appColors.mainHeadingColor
+                                : Colors.red),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: TextRubikRegular("+91", "left", 18.0,
+                              appColors.hintHeadingColor, false),
+                        ),
+                        VerticalDivider(
+                          width: 20,
+                          thickness: 1,
+                          indent: 0,
+                          color:  errorMobile == false
                               ? appColors.mainHeadingColor
-                              : Colors.red),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: TextRubikRegular("+91", "left", 18.0,
-                            appColors.hintHeadingColor, false),
-                      ),
-                      VerticalDivider(
-                        width: 20,
-                        thickness: 1,
-                        indent: 0,
-                        color:  errorMobile == false
-                            ? appColors.mainHeadingColor
-                            : Colors.red,
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(10),
-                          ],
-                          controller: controllerMobile,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          style: TextStyle(
-                              color: appColors.hintHeadingColor,
-                              fontFamily: "Rubik-regular",
-                              fontSize: 16),
-                          /*onFieldSubmitted: (mob) {
-                              setState(() {
-                                isTextFiledFocus = true;
-                              });
-                            },*/
-                          textAlign: TextAlign.left,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          onChanged: (text) {
-                            if (text != "") {
-                              textFieldFilled = true;
-                              if (textFieldFilled) {
+                              : Colors.red,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                            controller: controllerMobile,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            style: TextStyle(
+                                color: appColors.hintHeadingColor,
+                                fontFamily: "Rubik-regular",
+                                fontSize: 16),
+                            /*onFieldSubmitted: (mob) {
                                 setState(() {
-                                  isButtonEnabled = true;
+                                  isTextFiledFocus = true;
+                                });
+                              },*/
+                            textAlign: TextAlign.left,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            onChanged: (text) {
+                              if (text != "") {
+                                textFieldFilled = true;
+                                if (textFieldFilled) {
+                                  setState(() {
+                                    isButtonEnabled = true;
+                                  });
+                                }
+                              } else {
+                                textFieldFilled = false;
+                                setState(() {
+                                  isButtonEnabled = false;
                                 });
                               }
-                            } else {
-                              textFieldFilled = false;
-                              setState(() {
-                                isButtonEnabled = false;
-                              });
-                            }
-                          },
-                        ),
-                      )
-                    ],
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 6.0,left: 55),
-                  child: TextRubikRegular(
-                      errorMobile == true ? "$errorTextMobile" : "",
-                      "left",
-                      12.0,
-                      errorMobile == true
-                          ? Colors.red
-                          : appColors.hintHeadingColor,
-                      false),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6.0,left: 55),
+                    child: TextRubikRegular(
+                        errorMobile == true ? "$errorTextMobile" : "",
+                        "left",
+                        12.0,
+                        errorMobile == true
+                            ? Colors.red
+                            : appColors.hintHeadingColor,
+                        false),
+                  ),
+                ],
+              ),
+            )
+
+          ),
+        ),
+        bottomNavigationBar:
+
+
+       /* Padding(
+          padding: const EdgeInsets.only(left: 15,right: 15),
+          child: CustomElevatedButton(
+              buttonText: 'Next',
+              buttonTextFont: 18,
+              buttonTextColour: Colors.white,
+              buttonTextIsBold: false,
+              onPressed: () {
+                if (isFormValid()) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ActivityOtpScreen(mobileNum: controllerMobile.text)),
+                  );
+                }
+              },
+              buttonColor: isButtonEnabled
+                  ? Colors.green :Colors.green.withOpacity(0.2),
+              buttonBorderRadius: 10.0,
+              buttonBorderRadiusColor: isButtonEnabled
+                  ? Colors.green :Colors.green.withOpacity(0.2),
+              buttonHeight: 50,
+              buttonWidth: MediaQuery.of(context).size.width*0.90,
+              iconAlignment:"center",
+              // buttonIconData: Icons.menu_book,
+              buttonIconData: Icons.arrow_forward_ios,
+              buttonIconColor: Colors.white,
+              buttonIconSize: 16
+
+          ),
+        ),*/
+
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: CustomTextButton(
+              buttonColor: isButtonEnabled
+                  ? appColors.mainHeadingColor
+                  : appColors.containerBorderColor,
+              onPressed: () {
+                if (isFormValid()) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ActivityOtpScreen(mobileNum: controllerMobile.text)),
+                  );
+                }
+              },
+              title: "Next",
+              paddingSize: 15,
+              iconName: Icon(Icons.arrow_forward,color: Colors.white,size: 28,),
             ),
           )
-
-        ),
       ),
-      bottomNavigationBar:
-
-
-     /* Padding(
-        padding: const EdgeInsets.only(left: 15,right: 15),
-        child: CustomElevatedButton(
-            buttonText: 'Next',
-            buttonTextFont: 18,
-            buttonTextColour: Colors.white,
-            buttonTextIsBold: false,
-            onPressed: () {
-              if (isFormValid()) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ActivityOtpScreen(mobileNum: controllerMobile.text)),
-                );
-              }
-            },
-            buttonColor: isButtonEnabled
-                ? Colors.green :Colors.green.withOpacity(0.2),
-            buttonBorderRadius: 10.0,
-            buttonBorderRadiusColor: isButtonEnabled
-                ? Colors.green :Colors.green.withOpacity(0.2),
-            buttonHeight: 50,
-            buttonWidth: MediaQuery.of(context).size.width*0.90,
-            iconAlignment:"center",
-            // buttonIconData: Icons.menu_book,
-            buttonIconData: Icons.arrow_forward_ios,
-            buttonIconColor: Colors.white,
-            buttonIconSize: 16
-
-        ),
-      ),*/
-
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: CustomTextButton(
-            buttonColor: isButtonEnabled
-                ? appColors.mainHeadingColor
-                : appColors.containerBorderColor,
-            onPressed: () {
-              if (isFormValid()) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ActivityOtpScreen(mobileNum: controllerMobile.text)),
-                );
-              }
-            },
-            title: "Next",
-            paddingSize: 15,
-            iconName: Icon(Icons.arrow_forward,color: Colors.white,size: 28,),
-          ),
-        )
     );
   }
 

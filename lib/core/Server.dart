@@ -2,20 +2,33 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:chopper/chopper.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetSubCategory.dart';
+import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestAddChild.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserNameUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateUserName.dart';
+import 'package:gabha_app1/screens/home/wrapper/ResponseGetChild.dart';
+import 'package:gabha_app1/screens/registration/wrapper/RequestAddSubscription.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseAddUserSubscription.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseAnnualMembership.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseRegistration.dart';
 import 'package:http/io_client.dart' as http;
 
+import '../screens/registration/wrapper/RequestAddUser.dart';
 import '../screens/registration/wrapper/RequestUserLogin.dart';
 import '../screens/registration/wrapper/ResponseGetAllBoard.dart';
 import '../screens/registration/wrapper/ResponseGetAllGradeByBoard.dart';
+import '../screens/registration/wrapper/ResponseLogin.dart';
 import '../screens/registration/wrapper/ResponseSuccess.dart';
-import '../screens/registration/wrapper/ResponseUserLogin.dart';
 import 'Api.dart';
 
 
 
 class Server {
   Api? api;
-  String tokenMain = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOnsiaWQiOiI2M2U2MjUxNWQzMmQ4NmQ4NTY3NjAyMTgifSwiaWF0IjoxNjc2MzcxMjc0fQ.eXehFXKo9KAN5-c1Kv81wejsVVGJE2gy_B9tHmEVGno";
+ // String tokenMain = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOnsiaWQiOiI2M2U2MjUxNWQzMmQ4NmQ4NTY3NjAyMTgifSwiaWF0IjoxNjc2MzcxMjc0fQ.eXehFXKo9KAN5-c1Kv81wejsVVGJE2gy_B9tHmEVGno";
 
   //development
   // static const  String BASE_URL = "https://devnfapi.naturefit.in";
@@ -32,9 +45,18 @@ class Server {
   Server() {
     final converter = JsonSerializableConverter(const {
       ResponseSuccess: ResponseSuccess.fromJsonFactory,
-      ResponseUserLogin: ResponseUserLogin.fromJsonFactory,
+     /* ResponseUserLogin: ResponseUserLogin.fromJsonFactory,*/
       ResponseGetAllBoard: ResponseGetAllBoard.fromJsonFactory,
+      ResponseLogin: ResponseLogin.fromJsonFactory,
       ResponseGetAllGradeByBoard :ResponseGetAllGradeByBoard.fromJsonFactory,
+      ResponseSection :ResponseSection.fromJsonFactory,
+      ResponseGetSubCategory:ResponseGetSubCategory.fromJsonFactory,
+      ResponseGetStandard:ResponseGetStandard.fromJsonFactory,
+      ResponseAnnualMembership:ResponseAnnualMembership.fromJsonFactory,
+      ResponseRegistration:ResponseRegistration.fromJsonFactory,
+      ResponseAddUserSubscription:ResponseAddUserSubscription.fromJsonFactory,
+      ResponseGetChild:ResponseGetChild.fromJsonFactory,
+      ResponseUpdateUserName:ResponseUpdateUserName.fromJsonFactory
 
     });
 
@@ -60,8 +82,8 @@ class Server {
     api = chopper.getService<Api>();
   }
 
-  Future<Response<ResponseUserLogin>> loginUser(RequestUserLogin request) async {
-    Response<ResponseUserLogin> response = await api!.loginUser(request);
+  Future<Response<ResponseLogin>> loginUser(RequestUserLogin request) async {
+    Response<ResponseLogin> response = await api!.loginUser(request);
     return response;
   }
 
@@ -70,8 +92,63 @@ class Server {
     return response;
   }
 
-  Future<Response<ResponseGetAllGradeByBoard>> getAllGradeByBoard(String boardId) async {
-    Response<ResponseGetAllGradeByBoard> response = await api!.getAllGradeByBoard(boardId);
+  Future<Response<ResponseGetStandard>> getAllGradeByBoard(String boardId) async {
+    Response<ResponseGetStandard> response = await api!.getAllGradeByBoard(boardId);
+    return response;
+  }
+
+  Future<Response<ResponseAnnualMembership>> getSubscription(String name,int skip,int limit) async {
+    Response<ResponseAnnualMembership> response = await api!.getSubscription(name,skip,limit);
+    return response;
+  }
+
+  Future<Response<ResponseSection>> getCategoryByBoardAndGradeAndUserToken(String token,String boardId,String gradeId,int skip,int limit) async {
+    Response<ResponseSection> response = await api!.getCategoryByBoardAndGradeAndUserToken(token,boardId,gradeId,skip,limit);
+    return response;
+  }
+
+  Future<Response<ResponseGetSubCategory>> getSubcategoryByCategoryBoardAndGrade(String token,String boardId,String gradeId,String categoryId,int skip,int limit) async {
+    Response<ResponseGetSubCategory> response = await api!.getSubcategoryByCategoryBoardAndGrade(token,boardId,gradeId,categoryId,skip,limit);
+    return response;
+  }
+
+  Future<Response<ResponseGetChild>> getChildUserList(String token) async {
+    Response<ResponseGetChild> response = await api!.getChildUserList(token);
+    return response;
+  }
+
+  Future<Response<ResponseAddUserSubscription>> getSubscriptionByUser(String token,String childId) async {
+    Response<ResponseAddUserSubscription> response = await api!.getSubscriptionByUser(token,childId);
+    return response;
+  }
+
+ /* Future<Response<ResponseSection>> getCategoryByBoardAndGradeAndUserToken(String boardId,String gradeId, int skip, int limit) async {
+    Response<ResponseSection> response = await api!.getCategoryByBoardAndGradeAndUserToken(boardId,gradeId,skip,limit);
+    return response;
+  }*/
+
+  Future<Response<ResponseLogin>> addUser(RequestAddUser request) async {
+    Response<ResponseLogin> response = await api!.addUser(request);
+    return response;
+  }
+
+  Future<Response<ResponseAddUserSubscription>> addSubscription(RequestAddSubscription request) async {
+    Response<ResponseAddUserSubscription> response = await api!.addSubscription(request);
+    return response;
+  }
+
+  Future<Response<ResponseLogin>> updateUser(String token,RequestUserUpdate request) async {
+    Response<ResponseLogin> response = await api!.updateUser(token,request);
+    return response;
+  }
+
+  Future<Response<ResponseUpdateUserName>> updateUserName(String token,RequestUserNameUpdate request) async {
+    Response<ResponseUpdateUserName> response = await api!.updateUserName(token,request);
+    return response;
+  }
+
+  Future<Response<ResponseRegistration>> addChild(String token,RequestAddChild request) async {
+    Response<ResponseRegistration> response = await api!.addChild(token,request);
     return response;
   }
 

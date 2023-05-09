@@ -12,6 +12,7 @@ class AppColors{
   Color containerBorderColor =HexColor("#C5C5C5");
   Color textFieldHintColor =HexColor("#9A9A9A");
 
+
   //grey color box border background use for dropdown
   BoxDecoration greyColorBorderBoxDropDown = BoxDecoration(
       border: Border.all(color: const Color(0xffB8B8B8)),
