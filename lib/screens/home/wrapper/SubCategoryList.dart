@@ -1,6 +1,7 @@
 
 
 import 'package:gabha_app1/screens/home/wrapper/CategoryList.dart';
+import 'package:gabha_app1/screens/home/newWrappers/Layout.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -29,8 +30,12 @@ class SubCategoryList {
 
 
   //message field for fail
-  @JsonKey(name:"message")
-  String? message;
+  @JsonKey(name:"layout")
+  Layout? layout;
+
+
+  //
+
 
 
   SubCategoryList();

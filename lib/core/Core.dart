@@ -87,12 +87,17 @@ class Core{
     PreferenceUtils.setString("gabha_mobile", user.mobileNumber.toString());
     PreferenceUtils.setString("gabha_isParent", user.isParent.toString());
     PreferenceUtils.setString("gabha_modeOfCommunication", user.modeOfCommunication.toString());
-    // PreferenceUtils.setString("gabha_user_image", user..toString());
-    PreferenceUtils.setString("grade_id", user.grade!.gradeId.toString());
+
+    //PreferenceUtils.setString("grade_id", user.childList!);
+
+
+
+
+    /*   PreferenceUtils.setString("grade_id", user.childList!.grade!.gradeId.toString());
     PreferenceUtils.setString("board_id", user.grade!.board!.boardId.toString());
     PreferenceUtils.setString("grade_name", user.grade!.grade.toString());
     PreferenceUtils.setString("board_name", user.grade!.board!.boardShortName.toString());
-    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());
+    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());*/
      _storeSession(token, user);
   }
 
@@ -107,11 +112,11 @@ class Core{
     PreferenceUtils.setString("gabha_isParent", user.isParent.toString());
     PreferenceUtils.setString("gabha_modeOfCommunication", user.modeOfCommunication.toString());
    // PreferenceUtils.setString("gabha_user_image", user..toString());
-    PreferenceUtils.setString("grade_id", user.grade!.gradeId.toString());
+  /*  PreferenceUtils.setString("grade_id", user.grade!.gradeId.toString());
     PreferenceUtils.setString("board_id", user.grade!.board!.boardId.toString());
     PreferenceUtils.setString("grade_name", user.grade!.grade.toString());
     PreferenceUtils.setString("board_name", user.grade!.board!.boardShortName.toString());
-    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());
+    PreferenceUtils.setString("board_full_name", user.grade!.board!.board.toString());*/
   }
 
   logout() async {
@@ -299,7 +304,8 @@ class Core{
   //17-caterogy -getCategoryByBoardAndGradeAndUserToken  (user APi)
   Future<ChopperResponse.Response<ResponseSection>> getCategoryByBoardAndGradeAndUserToken(String boardId,String gradeId,int skip,int limit) {
     print('hiii------${PreferenceUtils.getString("gabha_token")}');
-    return server.getCategoryByBoardAndGradeAndUserToken("Bearer ${PreferenceUtils.getString("gabha_token")}",boardId,gradeId,skip,limit);
+    return server.getCategoryByBoardAndGradeAndUserToken("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOnsiaWQiOiI2NDUyM2NkOTkyY2UyYzE2Mzk0NGU0NzEifSwiaWF0IjoxNjgzMjAzNjMyfQ.4QFsF5b4XglStucW8DUcksBGJbtsmt0gCBk0xooa1aA",boardId,gradeId,skip,limit);
+    // return server.getCategoryByBoardAndGradeAndUserToken("Bearer ${PreferenceUtils.getString("gabha_token")}",boardId,gradeId,skip,limit);
   }
 
   //18-caterogy -getSubcategoryByCategoryBoardAndGrade  (user APi)

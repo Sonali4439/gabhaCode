@@ -90,7 +90,7 @@ class _ActivityAddChildState extends State<ActivityAddChild> {
     if (response.body?.status?.statusCode == 0) {
       gradeList =[];
       Grade defaultGrade = Grade();
-      defaultGrade.gradeId = "";
+      defaultGrade.id = "";
       defaultGrade.grade = "Select";
       gradeList!.add(defaultGrade);
 
@@ -112,8 +112,8 @@ class _ActivityAddChildState extends State<ActivityAddChild> {
     RequestAddChild requestAddChild = RequestAddChild();
     requestAddChild.userId = "${PreferenceUtils.getString("gabha_user_id")}";
     requestAddChild.childName = controllerName.text;
-    requestAddChild.gradeId=selectedGrade!.gradeId;
-   // requestAddChild.gradeId = "6447c348436f5f4df705dbd3";
+    requestAddChild.gradeId=selectedGrade!.id;
+   // requestAddChild.id = "6447c348436f5f4df705dbd3";
 
     print(requestAddChild.userId);
     print(requestAddChild.childName);
@@ -258,7 +258,7 @@ class _ActivityAddChildState extends State<ActivityAddChild> {
                               selectedBoard = value;
                               dropDownBoard = newValue ?? "";
                             });
-                            getAllGradeByBoard("${selectedBoard!.boardId}");
+                            getAllGradeByBoard("${selectedBoard!.id}");
                           }
                         });
                       },

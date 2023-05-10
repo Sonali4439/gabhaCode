@@ -15,7 +15,9 @@ SubCategoryList _$SubCategoryListFromJson(Map<String, dynamic> json) =>
       ..categoryList = json['category'] == null
           ? null
           : CategoryList.fromJson(json['category'] as Map<String, dynamic>)
-      ..message = json['message'] as String?;
+      ..layout = json['layout'] == null
+          ? null
+          : Layout.fromJson(json['layout'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$SubCategoryListToJson(SubCategoryList instance) =>
     <String, dynamic>{
@@ -24,5 +26,5 @@ Map<String, dynamic> _$SubCategoryListToJson(SubCategoryList instance) =>
       'language_name': instance.languageName,
       'position': instance.position,
       'category': instance.categoryList,
-      'message': instance.message,
+      'layout': instance.layout,
     };

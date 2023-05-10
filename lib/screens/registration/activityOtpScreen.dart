@@ -45,10 +45,10 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
   final defaultPinTheme = PinTheme(
     width: 40,
     height: 56,
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
         fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
     decoration: BoxDecoration(
-      border: Border.all(color: Color(0xFF00A36D), width: 1),
+      border: Border.all(color: const Color(0xFF00A36D), width: 1),
       borderRadius: BorderRadius.circular(5),
     ),
   );
@@ -56,10 +56,10 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
   final errorPinTheme = PinTheme(
     width: 40,
     height: 56,
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
         fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
     decoration: BoxDecoration(
-      border: Border.all(color: Color(0xFFff0000), width: 1),
+      border: Border.all(color: const Color(0xFFff0000), width: 1),
       borderRadius: BorderRadius.circular(5),
     ),
   );
@@ -67,10 +67,10 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
   final focusedPinTheme = PinTheme(
     width: 40,
     height: 56,
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
         fontSize: 20, fontWeight: FontWeight.normal, color: Colors.black),
     decoration: BoxDecoration(
-      border: Border.all(color: Color(0xFF00A36D), width: 1),
+      border: Border.all(color: const Color(0xFF00A36D), width: 1),
       borderRadius: BorderRadius.circular(5),
     ),
   );
@@ -103,31 +103,96 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
       print("${response.body?.payload?.token}");
       print("@@@@@@@@@@@@@@@@");
 
-      if(response.body?.getPayload()?.userList != null){
+      if(response.body?.getPayload()?.userList != null) {
+        if(response.body?.payload!.userList!.isParent == false){
+          //nrml user
+          //save data
+          //show welcome screen
+          //home screen
 
-        core.updateSession(response.body?.getPayload()?.token, response.body?.getPayload()?.userList);
+          PreferenceUtils.init();
+          PreferenceUtils.setString("gabha_token","${response.body?.payload?.token}");
+          PreferenceUtils.setString("gabha_user_id","${response.body?.payload?.userList!.id}");
+          PreferenceUtils.setString("gabha_user_name","${response.body?.payload?.userList!.useName}");
 
-        Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => WelcomeScreen(),
-          ),
-        );
+          Navigator.push(context,
+                   MaterialPageRoute(
+                     builder: (context) => WelcomeScreen(),
+                  ),
+            );
+
+        //  PreferenceUtils.setString("gabha_user_grade_id","${response.body?.payload?.userList!.grade!.id}");
+        //  PreferenceUtils.setString("gabha_user_board_id","${response.body?.payload?.userList!.grade!.board!.id}");
+        } else {
+          //parent user
+
+          //if length > 1
+          // show child list screen
+          //click on item
+          //save data
+          // dashboard
+
+          //if only 1 child
+          //show welcome screen
+          //dashboard
+
+
+
+
+
+        }
+
+        Future.delayed(const Duration(seconds: 1), () async {
+          Navigator.push(context,
+            MaterialPageRoute(
+              builder: (context) => const WelcomeScreen(),
+            ),
+          );
+        });
+
+
+
+        // response.body?.payload!.userList!.childList!.asMap().forEach((key,
+        //     value) async {
+        //   core.updateSession(response.body
+        //       ?.getPayload()
+        //       ?.token, response.body
+        //       ?.getPayload()
+        //       ?.userList);
+        //
+        //   Navigator.push(context,
+        //     MaterialPageRoute(
+        //       builder: (context) => WelcomeScreen(),
+        //     ),
+        //   );
+        // });
       }
+      // if(response.body?.getPayload()?.userList! != null){
+      //   response.body?.payload!.userList!.childList!.asMap().forEach((key, value) async {
+      //
+      //     pref.setString("child_name", jsonEncode("${response.body?.payload?.userList!.childList!.elementAt(key).child!.childName}")).then((value) => print('User Login Value Saved : $value'));
+      //     print("${response.body?.payload?.token}");
+      //
+      //     core.updateSession(response.body?.getPayload()?.token, response.body?.getPayload()?.userList);
+      //
+      //     Navigator.push(context,
+      //       MaterialPageRoute(
+      //         builder: (context) => WelcomeScreen(),
+      //       ),
+      //     );
+      //   });
+      //
+      //
+      //
+      //
+      // }
 
-
-     /* Future.delayed(const Duration(seconds: 2), () {
-        Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => WelcomeScreen(),
-          ),
-        );
-      });*/
     }else if (response.body?.status?.statusCode == 1) {
       print("faillll");
 
         Navigator.push(context,
           MaterialPageRoute(
-            builder: (context) => RegistrationCommanForm(),
+            builder: (context) => const RegistrationCommanForm(),
           ),
         );
 
@@ -279,7 +344,7 @@ class _ActivityOtpScreenState extends State<ActivityOtpScreen> {
           },
           title: "Next",
           paddingSize: 15,
-          iconName: Icon(Icons.arrow_forward,color: Colors.white,size: 28,),
+          iconName: const Icon(Icons.arrow_forward,color: Colors.white,size: 28,),
         ),
       )
       /*Padding(

@@ -13,6 +13,9 @@ UserList _$UserListFromJson(Map<String, dynamic> json) => UserList()
   ..mobileNumber = json['mobile_no'] as String?
   ..emailID = json['email'] as String?
   ..modeOfCommunication = json['mode_of_communication'] as String?
+  ..childList = (json['child_list'] as List<dynamic>?)
+      ?.map((e) => ChildList.fromJson(e as Map<String, dynamic>))
+      .toList()
   ..grade = json['grade'] == null
       ? null
       : Grade.fromJson(json['grade'] as Map<String, dynamic>);
@@ -24,5 +27,6 @@ Map<String, dynamic> _$UserListToJson(UserList instance) => <String, dynamic>{
       'mobile_no': instance.mobileNumber,
       'email': instance.emailID,
       'mode_of_communication': instance.modeOfCommunication,
+      'child_list': instance.childList,
       'grade': instance.grade,
     };

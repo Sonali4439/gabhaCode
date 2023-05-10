@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       bottomNavigationBar:  Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           boxShadow: [
             BoxShadow(color: appColors.hintHeadingColor.withOpacity(0.5), spreadRadius: 0, blurRadius: 10),
@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
 
         child:ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body:  IndexedStack(
         index: _selectedIndex,
-        children: <Widget>[
+        children: const <Widget>[
           //ActivityHome(),
           ActivityHomeLists(),
           ActivitySocialMedia(),

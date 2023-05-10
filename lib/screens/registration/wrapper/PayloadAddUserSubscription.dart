@@ -1,7 +1,7 @@
 
 import 'package:gabha_app1/screens/registration/wrapper/AcademicYear.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Subscriptions.dart';
-import 'package:gabha_app1/screens/registration/wrapper/User.dart';
+import 'package:gabha_app1/screens/registration/wrapper/UserList.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'PayloadAddUserSubscription.g.dart';
@@ -25,12 +25,8 @@ class PayloadAddUserSubscription {
   Subscriptions? subscriptions;
 
 
-
-
-
-
   @JsonKey(name:"user")
-  User? user;
+  UserList? user;
   @JsonKey(name:"buy_subscription_date")
   String? buySubscriptionDate;
   @JsonKey(name:"end_subscription_date")

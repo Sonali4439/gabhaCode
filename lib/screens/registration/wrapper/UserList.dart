@@ -2,6 +2,8 @@
 import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../home/wrapper/ChildList.dart';
+
 
 part 'UserList.g.dart';
 
@@ -25,6 +27,9 @@ class UserList {
 
   @JsonKey(name:"mode_of_communication")
   String? modeOfCommunication;
+
+  @JsonKey(name:"child_list")
+  List<ChildList>? childList;
 
   @JsonKey(name:"grade")
   Grade? grade;

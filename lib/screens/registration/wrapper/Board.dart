@@ -8,7 +8,7 @@ part 'Board.g.dart';
 class Board {
 
   @JsonKey(name:"_id")
-  String? boardId;
+  String? id;
   @JsonKey(name:"board")
   String? board;
   @JsonKey(name:"short_name")

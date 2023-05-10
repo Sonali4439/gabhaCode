@@ -52,19 +52,12 @@ class _ActivityHomeSectionDetailsState extends State<ActivityHomeSectionDetails>
   }
 
   void getSubcategoryByCategoryBoardAndGrade() async {
-    Response<ResponseGetSubCategory> response =
-    await core.getSubcategoryByCategoryBoardAndGrade("${PreferenceUtils.getString("board_id")}",'${PreferenceUtils.getString("grade_id")}',
-        "${widget.categoryId}",0,0);
+    Response<ResponseGetSubCategory> response = await core.getSubcategoryByCategoryBoardAndGrade("645b6d327b6977d8140fee9f",'645b6d3b7b6977d8140feea5',"${widget.categoryId}",0,0);
     if (response.body?.status?.statusCode == 0) {
-      print("subCattttttttttttttttttt");
       setState(() {
         subCategoryList = response.body?.payload;
       });
-
-    /*  subCategoryList!.sort((a, b) {
-        return a.position!.compareTo(b.position!);
-      });*/
-    }
+ }
   }
 
 
@@ -138,7 +131,14 @@ class _ActivityHomeSectionDetailsState extends State<ActivityHomeSectionDetails>
 
                               GestureDetector(
                                 onTap: (){
-                                  print("sectionnnnnnnnnnnnnnnnn");
+                                  print("sectionnnnnnnnnnnnnnnnn---${subCategoryList!.elementAt(index).layout!.layout}");
+
+                                  if(subCategoryList!.elementAt(index).layout!.layout == "Card with two images"){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const ActivityCardWithTwoImages()));
+                                  }
 
                                    //Layout 2: white_card_on_dark_background
                                  /* Navigator.push(
@@ -202,10 +202,10 @@ class _ActivityHomeSectionDetailsState extends State<ActivityHomeSectionDetails>
                                           builder: (context) => ActivityTheoryWithoutOptionalParameter()));*/
 
                                   //Layout 1: text_with_image
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ActivityTextWithImage()));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ActivityTextWithImage()));
 
 
                                 },

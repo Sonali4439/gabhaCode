@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gabha_app1/core/Core.dart';
 import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
 import 'package:gabha_app1/screens/home/AcitivtyHome.dart';
+import 'package:gabha_app1/screens/home/newWrappers/SectionCategory.dart';
 import 'package:gabha_app1/screens/home/wrapper/CategoryList.dart';
 
 import '../../constant/AppColors.dart';
@@ -23,19 +24,22 @@ class ActivityHomeLists extends StatefulWidget {
 class _ActivityHomeListsState extends State<ActivityHomeLists> {
   AppColors appColors = AppColors();
   Core core = Core();
-  List<SectionImagesModel> sectionImagedata=[
-    SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
-    SectionImagesModel( sectionImg: "assets/images/section_img1.png"),
-   // SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
-  ];
-
-  List<SectionHomeModel> sectionHomeModel=[
-    SectionHomeModel( sectionName: 'श्रेणी १ Section 1'),
-    SectionHomeModel( sectionName: 'श्रेणी २ Section 2'),
-    SectionHomeModel( sectionName: 'श्रेणी ३ Section 3'),
-  ];
+  // List<SectionImagesModel> sectionImagedata=[
+  //   SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
+  //   SectionImagesModel( sectionImg: "assets/images/section_img1.png"),
+  //  // SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
+  // ];
+  //
+  // List<SectionHomeModel> sectionHomeModel=[
+  //   SectionHomeModel( sectionName: 'श्रेणी १ Section 1'),
+  //   SectionHomeModel( sectionName: 'श्रेणी २ Section 2'),
+  //   SectionHomeModel( sectionName: 'श्रेणी ३ Section 3'),
+  // ];
 
   List<CategoryList>? categoryList=[];
+  List<SectionCategory>? sectionCategoryList=[];
+
+  List<int>? sectionCount=[1,2];
 
   @override
   void initState() {
@@ -43,6 +47,10 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
     print('----board-id----${PreferenceUtils.getString("board_id")}');
     super.initState();
     onResume();
+
+
+
+
   }
   void onResume(){
     getCategoryByBoardAndGradeAndUserToken();
@@ -59,13 +67,38 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
   }*/
 
   void getCategoryByBoardAndGradeAndUserToken() async {
-    Response<ResponseSection> response =
-    await core.getCategoryByBoardAndGradeAndUserToken("${PreferenceUtils.getString("board_id")}",'${PreferenceUtils.getString("grade_id")}',0,0);
+    Response<ResponseSection> response = await core.getCategoryByBoardAndGradeAndUserToken("645b6d327b6977d8140fee9f",'645b6d3b7b6977d8140feea5',0,0);
+    // await core.getCategoryByBoardAndGradeAndUserToken("${PreferenceUtils.getString("board_id")}",'${PreferenceUtils.getString("grade_id")}',0,0);
     if (response.body?.status?.statusCode == 0) {
       setState(() {
         categoryList = response.body?.payload;
       });
+      setupData();
     }
+  }
+
+
+  void setupData(){
+    sectionCategoryList=[];
+    sectionCount!.asMap().forEach((key, sectionCountValue) {
+      SectionCategory sectionCategory = SectionCategory();
+      List<CategoryList> categoryListTemp = [];
+      categoryList!.asMap().forEach((key, categoryListValue) async {
+        if(sectionCountValue == categoryListValue.section){
+          sectionCategory.id = categoryListValue.id;
+          sectionCategory.name = categoryListValue.categoryName;
+          categoryListTemp.add(categoryListValue);
+        }
+      });
+      sectionCategory.categoryList = categoryListTemp;
+      sectionCategoryList!.add(sectionCategory);
+    });
+
+
+    debugPrint('----sectionCategoryList---${sectionCategoryList!.length}');
+    debugPrint('----sectionCategoryList---${sectionCategoryList!.elementAt(0).categoryList!.length}');
+    debugPrint('----sectionCategoryList---${sectionCategoryList!.elementAt(1).categoryList!.length}');
+
   }
 
   @override
@@ -80,10 +113,10 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
         width: MediaQuery.of(context).size.width,
         child: Center(
           child: Container(
-            padding: EdgeInsets.all(14),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(50), topLeft: Radius.circular(50)),
               boxShadow: [
                 BoxShadow(color: appColors.hintHeadingColor.withOpacity(0.5), spreadRadius: 0, blurRadius: 10),
@@ -119,12 +152,12 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
 
               GestureDetector(
                 onTap: (){
-                  if("${PreferenceUtils.getString("gabha_isParent")}" =="true")
-                  debugPrint("home page call");
-                  Navigator.push(
+                  // if("${PreferenceUtils.getString("gabha_isParent")}" =="true")
+                  // debugPrint("home page call");
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ActivityHome()));
+                          builder: (context) => const ActivityHomeLists()));
                 },
                 child: Column(
                   children: [
@@ -149,7 +182,7 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
 
               Expanded(
                 child: ListView.builder(itemBuilder:
-                    (BuildContext context, int index) {
+                    (BuildContext context, int sectionCategoryListIndex) {
                   return GestureDetector(
                     onTap: (){},
                     child: Padding(
@@ -160,9 +193,8 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               TextRubikRegular(
-                               "श्रेणी १ Section 1",
+                               "श्रेणी ${sectionCategoryListIndex+1} Section ${sectionCategoryListIndex+1}",
                                   "left",
                                   18.0,appColors.hintHeadingColor,
                                   false),
@@ -170,8 +202,8 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
                           ),
 
                           //inside listview
-                          SizedBox(
-                            height: 250,
+                          Container(
+                            height: 150,
                             width: double.infinity,
                             child: ListView.builder(itemBuilder:  (BuildContext context, int index) {
                               return GestureDetector(
@@ -179,35 +211,32 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ActivityHomeSectionDetails(categoryId :/*categoryList!.elementAt(index).id,*/"6447c40d436f5f4df705dc05")));
+                                          builder: (context) => ActivityHomeSectionDetails(categoryId :sectionCategoryList!.elementAt(sectionCategoryListIndex).categoryList!.elementAt(index).id)));
 
                                 },
-                                child:
-                              /*  Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,10,10,10),
-                                  child:  Image.asset("${sectionImagedata[index].sectionImg}",),
-                                ),*/
-                                Padding(
+                                child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     width: 100,
-                                    height: 200,
+                                    decoration: appColors.greyColorBorderBoxDropDown,
+                                    // height: 150,
                                     child: Column(
-                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
-                                          child: Image.asset("assets/images/bear_img.png",),
-                                        ),
-                                        Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(top: 8.0),
-                                            child: TextRubikRegular(
-                                              /* "${vowelsData[index].name}",*/
-                                                "अक्षर ओळख ",
-                                                "left",
-                                                12.0,appColors.hintHeadingColor,
-                                                false),
+                                        Expanded(child: Image.network("${sectionCategoryList!.elementAt(sectionCategoryListIndex).categoryList!.elementAt(index).imageFilepath}")),
+                                        Container(
+                                          color: appColors.mainHeadingColor,
+                                          height: 40,
+                                          child: Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all( 8.0),
+                                              child: TextRubikRegular(
+                                                "${sectionCategoryList!.elementAt(sectionCategoryListIndex).categoryList!.elementAt(index).categoryName}",
+                                                //   "अक्षर ओळख ",
+                                                  "left",
+                                                  13.0,Colors.white,
+                                                  false),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -221,7 +250,7 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
                             },
 
                                 scrollDirection: Axis.horizontal,
-                                itemCount: sectionImagedata.length),
+                                itemCount: sectionCategoryList!.elementAt(sectionCategoryListIndex).categoryList!.length),
                           ),
 
 
@@ -231,10 +260,10 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
                   );
                 },
                     scrollDirection: Axis.vertical,
-                    itemCount: categoryList!.length),
+                    itemCount: sectionCategoryList!.length),
               ),
 
-              SizedBox(height: 50,)
+              const SizedBox(height: 50,)
 
 
 

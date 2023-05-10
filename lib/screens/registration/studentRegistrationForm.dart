@@ -85,19 +85,19 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     requestAddUser.modeOfCommunication = widget.modeOfCommunication;
     requestAddUser.isParent = widget.isParents;
     requestAddUser.childName=controllerChildName.text;
-    requestAddUser.childGradeId=selectedGrade!.gradeId;
+    requestAddUser.gradeId=selectedGrade!.id;
 
     /*if(widget.isParents ==true)
       {
-        requestAddUser.gradeId="6447c348436f5f4df705dbd3";
+        requestAddUser.id="6447c348436f5f4df705dbd3";
       }else{
-      requestAddUser.childGradeId="642fab761045f4c64aaf3856";
+      requestAddUser.childid="642fab761045f4c64aaf3856";
     }*/
 
     print(requestAddUser.name);
     print(requestAddUser.mobileNo);
     print(requestAddUser.isParent);
-    print(requestAddUser.childGradeId);
+    print(requestAddUser.gradeId);
 
     Response<ResponseLogin> response = await core.addUser(requestAddUser);
 
@@ -139,13 +139,13 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
   }
 
   //get all grade by borad
-  void getAllGradeByBoard(String boardId) async {
-    debugPrint('----id---${boardId}');
-    Response<ResponseGetStandard> response = await core.getAllGradeByBoard(boardId);
+  void getAllGradeByBoard(String id) async {
+    debugPrint('----id---${id}');
+    Response<ResponseGetStandard> response = await core.getAllGradeByBoard(id);
     if (response.body?.status?.statusCode == 0) {
       gradeList =[];
       Grade defaultGrade = Grade();
-      defaultGrade.gradeId = "";
+      defaultGrade.id = "";
       defaultGrade.grade = "Select";
       gradeList!.add(defaultGrade);
 
@@ -300,7 +300,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
                               selectedBoard = value;
                               dropDownBoard = newValue ?? "";
                             });
-                            getAllGradeByBoard("${selectedBoard!.boardId}");
+                            getAllGradeByBoard("${selectedBoard!.id}");
                           }
                         });
                       },

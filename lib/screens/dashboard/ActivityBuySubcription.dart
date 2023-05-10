@@ -117,7 +117,7 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
           if(value.board == "${widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.grade!.board!.board}")
           {
             dropDownBoard = value.board;
-            getAllGradeByBoard("${value.boardId}");
+            getAllGradeByBoard("${value.id}");
           }
         });
       });
@@ -130,7 +130,7 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
     if (response.body?.status?.statusCode == 0) {
       gradeList =[];
       Grade defaultGrade = Grade();
-      defaultGrade.gradeId = "";
+      defaultGrade.id = "";
       defaultGrade.grade = "Select";
       gradeList!.add(defaultGrade);
 
@@ -277,7 +277,7 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
                               selectedBoard = value;
                               dropDownBoard = newValue ?? "";
                             });
-                            getAllGradeByBoard("${selectedBoard!.boardId}");
+                            getAllGradeByBoard("${selectedBoard!.id}");
                           }
                         });
                       },

@@ -32,6 +32,16 @@ class _ActivityCardWithTwoImagesState extends State<ActivityCardWithTwoImages> {
     VowelDetailsModel( vowelName: 'अ',),
 
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

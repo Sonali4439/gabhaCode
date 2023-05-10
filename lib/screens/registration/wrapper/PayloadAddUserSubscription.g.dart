@@ -18,7 +18,7 @@ PayloadAddUserSubscription _$PayloadAddUserSubscriptionFromJson(
           : Subscriptions.fromJson(json['subscription'] as Map<String, dynamic>)
       ..user = json['user'] == null
           ? null
-          : User.fromJson(json['user'] as Map<String, dynamic>)
+          : UserList.fromJson(json['user'] as Map<String, dynamic>)
       ..buySubscriptionDate = json['buy_subscription_date'] as String?
       ..endSubscriptionDate = json['end_subscription_date'] as String?;
 

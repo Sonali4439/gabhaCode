@@ -22,7 +22,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     print('--------${PreferenceUtils.getString("gabha_token")}');
     print('----name----${PreferenceUtils.getString("gabha_user_name")}');
     print('---userid-----${PreferenceUtils.getString("gabha_user_id")}');
+    print('---userid-----${PreferenceUtils.getString("gabha_user_grade_id")}');
+    print('---userid-----${PreferenceUtils.getString("gabha_user_board_id")}');
   }
+
+
 
   @override
   Widget build(BuildContext context) {

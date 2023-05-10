@@ -8,11 +8,13 @@ part 'Grade.g.dart';
 @JsonSerializable()
 class Grade {
 
+  @JsonKey(name:"_id")
+  String? id;
+
   @JsonKey(name:"grade")
   String? grade;
 
-  @JsonKey(name:"_id")
-  String? gradeId;
+
 
   @JsonKey(name:"board")
   Board? board;

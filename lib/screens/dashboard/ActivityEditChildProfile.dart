@@ -80,7 +80,7 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
         response.body?.payload?.asMap().forEach((key, value) {
           if(value.board == PreferenceUtils.getString("board_full_name")){
             dropDownBoard = value.board;
-            getAllGradeByBoard("${value.boardId}");
+            getAllGradeByBoard("${value.id}");
           }
         });
       });
@@ -93,7 +93,7 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
     if (response.body?.status?.statusCode == 0) {
       gradeList =[];
       Grade defaultGrade = Grade();
-      defaultGrade.gradeId = "";
+      defaultGrade.id = "";
       defaultGrade.grade = "Select";
       gradeList!.add(defaultGrade);
 
@@ -129,7 +129,7 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
       print(requestUserUpdate.gradeId);
       print("getttttttttttttt");
     }else{
-      requestUserUpdate.gradeId = selectedGrade!.gradeId;
+      requestUserUpdate.gradeId = selectedGrade!.id;
       print(requestUserUpdate.gradeId);
       print("11111111111getttttttttttttt");
     }
