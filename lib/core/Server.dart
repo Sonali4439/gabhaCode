@@ -6,8 +6,10 @@ import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
 import 'package:gabha_app1/core/wrapper/ResponseGetSubCategory.dart';
 import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestAddChild.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestEditChildProfile.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserNameUpdate.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateChild.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateUserName.dart';
 import 'package:gabha_app1/screens/home/wrapper/ResponseGetChild.dart';
 import 'package:gabha_app1/screens/registration/wrapper/RequestAddSubscription.dart';
@@ -56,7 +58,8 @@ class Server {
       ResponseRegistration:ResponseRegistration.fromJsonFactory,
       ResponseAddUserSubscription:ResponseAddUserSubscription.fromJsonFactory,
       ResponseGetChild:ResponseGetChild.fromJsonFactory,
-      ResponseUpdateUserName:ResponseUpdateUserName.fromJsonFactory
+      ResponseUpdateUserName:ResponseUpdateUserName.fromJsonFactory,
+      ResponseUpdateChild:ResponseUpdateChild.fromJsonFactory
 
     });
 
@@ -139,6 +142,11 @@ class Server {
 
   Future<Response<ResponseLogin>> updateUser(String token,RequestUserUpdate request) async {
     Response<ResponseLogin> response = await api!.updateUser(token,request);
+    return response;
+  }
+
+  Future<Response<ResponseUpdateChild>> updateChildUser(String token,RequestEditChildProfile request) async {
+    Response<ResponseUpdateChild> response = await api!.updateChildUser(token,request);
     return response;
   }
 

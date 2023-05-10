@@ -6,6 +6,7 @@ import 'package:gabha_app1/constant/TextRubikRegular.dart';
 import 'package:gabha_app1/core/Core.dart';
 import 'package:gabha_app1/core/SharedPrefrenceSessionManager.dart';
 import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
+import 'package:gabha_app1/screens/registration/annualMembershipScreen.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Board.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
 
@@ -34,6 +35,8 @@ class _ActivityChildBuySubscriptionState extends State<ActivityChildBuySubscript
   List<Grade>? gradeList = [];
   Grade? selectedGrade;
   String? dropDownGrade ;
+
+  bool isButtonEnabled = false;
 
   // List<String>? gradeListData = ['Select'];
 
@@ -337,6 +340,14 @@ class _ActivityChildBuySubscriptionState extends State<ActivityChildBuySubscript
 
                   GestureDetector(
                     onTap: (){
+                      print("Successs");
+                      setState(() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnnualMembershipScreen(userId :"${PreferenceUtils.getString("gabha_user_id")}", flag:"childBuy")),
+                        );
+                      });
 
                     },
                     child: Padding(

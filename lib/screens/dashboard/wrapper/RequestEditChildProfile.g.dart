@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'RequestUserUpdate.dart';
+part of 'RequestEditChildProfile.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RequestUserUpdate _$RequestUserUpdateFromJson(Map<String, dynamic> json) =>
-    RequestUserUpdate()
+RequestEditChildProfile _$RequestEditChildProfileFromJson(
+        Map<String, dynamic> json) =>
+    RequestEditChildProfile()
       ..userId = json['user_id'] as String?
       ..userName = json['name'] as String?
       ..mobileNo = json['mobile'] as String?
       ..email = json['email'] as String?
-      ..childGradeId = json['child_grade_id'] as String?
-      ..modeOfCommunication = json['mode_of_communication'] as String?;
+      ..gradeId = json['grade_id'] as String?;
 
-Map<String, dynamic> _$RequestUserUpdateToJson(RequestUserUpdate instance) =>
+Map<String, dynamic> _$RequestEditChildProfileToJson(
+        RequestEditChildProfile instance) =>
     <String, dynamic>{
       'user_id': instance.userId,
       'name': instance.userName,
       'mobile': instance.mobileNo,
       'email': instance.email,
-      'child_grade_id': instance.childGradeId,
-      'mode_of_communication': instance.modeOfCommunication,
+      'grade_id': instance.gradeId,
     };

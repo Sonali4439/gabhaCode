@@ -74,24 +74,11 @@ class _ActivityEditParentProfileState extends State<ActivityEditParentProfile> {
     if (response.body?.status?.statusCode == 0) {
       setState(() {
         print("update successfulllyyyyyyyyyyyyy");
-       /* if(response.body?.getPayload()?.userList !=null)
-          {
-            core.updateSession(response.body?.getPayload()?.token, response.body?.getPayload()?.userList);
-          }*/
-
 
        /* PreferenceUtils.init();
-        PreferenceUtils.setString("gabha_user_name", "${response.body?.payload?.userList?.useName}");
-        print("%%%%%%%%%%---------");*/
-
-      /*  print("${PreferenceUtils.getString("gabha_user_name")}");
-        print("%%%%%%%%%%%%%%%%%%");*/
-
-        debugPrint("${response.body?.payload?.userList}");
-        print("^^^^^^^^^^^^^^^^^^");
-
-        PreferenceUtils.init();
-        PreferenceUtils.setString("gabha_user_name", "${response.body?.payload?.userList?.useName}");
+        PreferenceUtils.setString("gabha_user_name", controllerName.text);
+        PreferenceUtils.setString("gabha_mobile", controllerName.text);
+        PreferenceUtils.setString("gabha_email", controllerName.text);*/
 
           Navigator.push(
           context,
@@ -248,9 +235,8 @@ class _ActivityEditParentProfileState extends State<ActivityEditParentProfile> {
                           fontSize: 14, color: Colors.white)),
                   onPressed: () {
                      if (formKey.currentState!.validate()) {
-                          if (formKey.currentState!.validate()) {
                             updateUser();
-                      }
+
                     }
 
                   },

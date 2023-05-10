@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:gabha_app1/core/Core.dart';
 import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
+import 'package:gabha_app1/screens/home/AcitivtyHome.dart';
 import 'package:gabha_app1/screens/home/wrapper/CategoryList.dart';
 
 import '../../constant/AppColors.dart';
@@ -22,16 +23,16 @@ class ActivityHomeLists extends StatefulWidget {
 class _ActivityHomeListsState extends State<ActivityHomeLists> {
   AppColors appColors = AppColors();
   Core core = Core();
-  List<SectionHomeModel> sectionHomeModel=[
-    SectionHomeModel( sectionName: 'श्रेणी १ Section 1'),
-    SectionHomeModel( sectionName: 'श्रेणी २ Section 2'),
-    SectionHomeModel( sectionName: 'श्रेणी ३ Section 3'),
-  ];
-
   List<SectionImagesModel> sectionImagedata=[
     SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
     SectionImagesModel( sectionImg: "assets/images/section_img1.png"),
    // SectionImagesModel( sectionImg: "assets/images/section_imgs.png"),
+  ];
+
+  List<SectionHomeModel> sectionHomeModel=[
+    SectionHomeModel( sectionName: 'श्रेणी १ Section 1'),
+    SectionHomeModel( sectionName: 'श्रेणी २ Section 2'),
+    SectionHomeModel( sectionName: 'श्रेणी ३ Section 3'),
   ];
 
   List<CategoryList>? categoryList=[];
@@ -46,6 +47,16 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
   void onResume(){
     getCategoryByBoardAndGradeAndUserToken();
   }
+
+ /* void getCategoryUniqueSections() async {
+    Response<ResponseSection> response =
+    await core.getCategoryUniqueSections("${PreferenceUtils.getString("board_id")}",'${PreferenceUtils.getString("grade_id")}',0,0);
+    if (response.body?.status?.statusCode == 0) {
+     *//* setState(() {
+        categoryList = response.body?.payload;
+      });*//*
+    }
+  }*/
 
   void getCategoryByBoardAndGradeAndUserToken() async {
     Response<ResponseSection> response =
@@ -105,22 +116,35 @@ class _ActivityHomeListsState extends State<ActivityHomeLists> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextRubikRegular(
-                  "Home",
-                  "left",
-                  24.0,appColors.hintHeadingColor,
-                  true),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0,bottom: 30),
-                child: TextRubikRegular(
-                   /* "Vedant Patil!",*/
-                  "${PreferenceUtils.getString("gabha_user_name")}".isNotEmpty
-                   ? '${PreferenceUtils.getString("gabha_user_name")}'
-                    :"",
-                    "left",
-                    16.0,appColors.subHeadingColor,
-                    false),
+
+              GestureDetector(
+                onTap: (){
+                  if("${PreferenceUtils.getString("gabha_isParent")}" =="true")
+                  debugPrint("home page call");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ActivityHome()));
+                },
+                child: Column(
+                  children: [
+                    TextRubikRegular(
+                        "Home",
+                        "left",
+                        24.0,appColors.hintHeadingColor,
+                        true),
+                    TextRubikRegular(
+                      /* "Vedant Patil!",*/
+                        "${PreferenceUtils.getString("gabha_user_name")}".isNotEmpty
+                            ? '${PreferenceUtils.getString("gabha_user_name")}'
+                            :"",
+                        "left",
+                        16.0,appColors.subHeadingColor,
+                        false),
+                  ],
+                ),
               ),
+
 
 
               Expanded(

@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:gabha_app1/constant/AppColors.dart';
 import 'package:gabha_app1/constant/CustomTextFieldWiget.dart';
@@ -5,6 +6,8 @@ import 'package:gabha_app1/constant/TextRubikRegular.dart';
 import 'package:gabha_app1/core/Core.dart';
 
 import '../../core/SharedPrefrenceSessionManager.dart';
+import 'wrapper/RequestUserNameUpdate.dart';
+import 'wrapper/ResponseUpdateUserName.dart';
 
 class ActivityChildSubcriptionDetails extends StatefulWidget {
   const ActivityChildSubcriptionDetails({Key? key}) : super(key: key);
@@ -23,13 +26,13 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
   @override
   void initState() {
     super.initState();
-   // controllerName.text="${widget.childList!.child!.childName}";
+    controllerName.text="${PreferenceUtils.getString("gabha_user_name")}";
 
   }
 
- /* void updateUserName() async {
+  void updateUserName() async {
     RequestUserNameUpdate requestUserNameUpdate = RequestUserNameUpdate();
-    requestUserNameUpdate.userId = "${widget.childList!.child!.childId}";
+    requestUserNameUpdate.userId = "${PreferenceUtils.getString("gabha_user_id")}";
     requestUserNameUpdate.childName =controllerName.text;
 
     print(requestUserNameUpdate.userId);
@@ -39,12 +42,14 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
 
     if (response.body?.status?.statusCode == 0) {
       setState(() {
+        PreferenceUtils.init();
+        PreferenceUtils.setString("gabha_user_name", controllerName.text);
         isShowDialog = false;
         print("name updated");
 
       });
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +107,10 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
                                   child: TextRubikRegular("Subscribed",
                                       "left", 16.0, appColors.mainHeadingColor, false),
                                 ),
-                              /*  TextRubikRegular(
-                                    "${core.convertServerDateToDateddmmyy(widget.childList!.child!.userSubscription!.buySubscriptionDate)} To ${core.convertServerDateToDateddmmyy(widget.childList!.child!.userSubscription!.endSubscriptionDate)}",
-                                    *//*"May 21 to May 22 2024",*//*
-                                    "left", 16.0, appColors.hintHeadingColor, false),*/
+                                TextRubikRegular(
+                                    "${core.convertServerDateToDateddmmyy("${PreferenceUtils.getString("subscription_start_date")}")} To ${core.convertServerDateToDateddmmyy("${PreferenceUtils.getString("subscription_end_date")}")}",
+                                   /* "May 21 to May 22 2024",*/
+                                    "left", 16.0, appColors.hintHeadingColor, false),
                               ],
                             ),
                           ),
@@ -177,12 +182,12 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
                               "left", 18.0, appColors.hintHeadingColor, false),
                         ),
 
-                     /*   Padding(
+                        Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
-                          child: TextRubikRegular(*//*"CBSC",*//*
-                              "${widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.grade!.board!.boardShortName}",
+                          child: TextRubikRegular(/*"CBSC",*/
+                              "${PreferenceUtils.getString("board_name")}",
                               "left", 18.0, appColors.subHeadingColor, false),
-                        ),*/
+                        ),
 
                         Padding(
                           padding: const EdgeInsets.only(top: 30,left: 20),
@@ -190,12 +195,12 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
                               "left", 18.0, appColors.hintHeadingColor, false),
                         ),
 
-                      /*  Padding(
+                        Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
-                          child: TextRubikRegular(*//*"4th",*//*
-                              "${widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.grade!.grade}",
+                          child: TextRubikRegular(/*"4th",*/
+                              "${PreferenceUtils.getString("grade_name")}",
                               "left", 18.0, appColors.subHeadingColor, false),
-                        ),*/
+                        ),
 
                         Padding(
                           padding: const EdgeInsets.only(top: 30,left: 20),
@@ -203,22 +208,22 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
                               "left", 18.0, appColors.hintHeadingColor, false),
                         ),
 
-                        /*Padding(
+                        Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
-                          child: TextRubikRegular(*//*"Annual Membership (1 year)",*//*
-                              "${widget.childList!.child!.userSubscription!.subscriptions!.subscriptionType!.type}",
+                          child: TextRubikRegular(/*"Annual Membership (1 year)",*/
+                              "Annual Membership (${PreferenceUtils.getString("subscription_type")})",
                               "left", 18.0, appColors.subHeadingColor, false),
-                        ),*/
-                    /*    Padding(
+                        ),
+                        Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
-                          child: TextRubikRegular("Academic year  ${core.convertServerDateToDateddmmyy(widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.startAcademicDate)} - ${core.convertServerDateToDateddmmyy(widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.endAcademicDate)}",
+                          child: TextRubikRegular("Academic year  ${core.convertServerDateToDateddmmyy("${PreferenceUtils.getString("academic_start_date")}")} - ${core.convertServerDateToDateddmmyy("${PreferenceUtils.getString("academic_end_date")}")}",
                               "left", 18.0, appColors.subHeadingColor, false),
-                        ),*/
-                      /*  Padding(
+                        ),
+                        Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
-                          child: TextRubikRegular("Subscribed on ${core.convertServerDateToDateddmmyy(widget.childList!.child!.userSubscription!.buySubscriptionDate)}",
+                          child: TextRubikRegular("Subscribed on ${core.convertServerDateToDateddmmyy("${PreferenceUtils.getString("subscription_start_date")}")}",
                               "left", 18.0, appColors.subHeadingColor, false),
-                        ),*/
+                        ),
 
 
 
@@ -291,7 +296,7 @@ class _ActivityChildSubcriptionDetailsState extends State<ActivityChildSubcripti
                                                   fontSize: 14, color: Colors.white)),
                                           onPressed: () {
                                             if (formKey.currentState!.validate()) {
-                                             // updateUserName();
+                                              updateUserName();
                                             }
 
                                           },

@@ -4,8 +4,10 @@ import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
 import 'package:gabha_app1/core/wrapper/ResponseGetSubCategory.dart';
 import 'package:gabha_app1/core/wrapper/ResponseSection.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestAddChild.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestEditChildProfile.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserNameUpdate.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserUpdate.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateChild.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateUserName.dart';
 import 'package:gabha_app1/screens/home/wrapper/ResponseGetChild.dart';
 import 'package:gabha_app1/screens/registration/wrapper/RequestAddSubscription.dart';
@@ -66,6 +68,10 @@ abstract class Api extends ChopperService {
 
   @Put(path:"/user/updateUser")
   Future<Response<ResponseLogin>> updateUser(@Header('authorization') String token,@Body()RequestUserUpdate request);
+
+  @Put(path:"/user/updateChildUser")
+  Future<Response<ResponseUpdateChild>> updateChildUser(@Header('authorization') String token,@Body()RequestEditChildProfile request);
+
 
   @Put(path:"/user/updateChildUserName")
   Future<Response<ResponseUpdateUserName>> updateUserName(@Header('authorization') String token,@Body()RequestUserNameUpdate request);

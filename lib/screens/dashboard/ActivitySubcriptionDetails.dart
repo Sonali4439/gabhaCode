@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:gabha_app1/constant/CustomTextFieldWiget.dart';
 import 'package:gabha_app1/core/Core.dart';
+import 'package:gabha_app1/core/SharedPrefrenceSessionManager.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/RequestUserNameUpdate.dart';
 import 'package:gabha_app1/screens/dashboard/wrapper/ResponseUpdateUserName.dart';
 import 'package:gabha_app1/screens/home/wrapper/ChildList.dart';
@@ -44,6 +45,8 @@ class _ActivitySubcriptionDetailsState extends State<ActivitySubcriptionDetails>
 
     if (response.body?.status?.statusCode == 0) {
       setState(() {
+        PreferenceUtils.init();
+        PreferenceUtils.setString("gabha_user_name", controllerName.text);
         isShowDialog = false;
         print("name updated");
 
@@ -211,7 +214,7 @@ class _ActivitySubcriptionDetailsState extends State<ActivitySubcriptionDetails>
                         Padding(
                           padding: const EdgeInsets.only(top: 10,left: 20),
                           child: TextRubikRegular(/*"Annual Membership (1 year)",*/
-                              "${widget.childList!.child!.userSubscription!.subscriptions!.subscriptionType!.type}",
+                              "Annual Membership (${widget.childList!.child!.userSubscription!.subscriptions!.subscriptionType!.type})",
                               "left", 18.0, appColors.subHeadingColor, false),
                         ),
                         Padding(

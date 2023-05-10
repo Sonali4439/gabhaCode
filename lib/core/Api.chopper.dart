@@ -225,6 +225,27 @@ class _$Api extends Api {
   }
 
   @override
+  Future<Response<ResponseUpdateChild>> updateChildUser(
+    String token,
+    RequestEditChildProfile request,
+  ) {
+    final $url = 'api/user/updateChildUser';
+    final $headers = {
+      'authorization': token,
+    };
+
+    final $body = request;
+    final $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+      headers: $headers,
+    );
+    return client.send<ResponseUpdateChild, ResponseUpdateChild>($request);
+  }
+
+  @override
   Future<Response<ResponseUpdateUserName>> updateUserName(
     String token,
     RequestUserNameUpdate request,

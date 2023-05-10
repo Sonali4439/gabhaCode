@@ -1,10 +1,20 @@
+import 'package:chopper/chopper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gabha_app1/core/Core.dart';
+import 'package:gabha_app1/core/SharedPrefrenceSessionManager.dart';
+import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
+import 'package:gabha_app1/screens/dashboard/DashboardScreen.dart';
+import 'package:gabha_app1/screens/dashboard/wrapper/RequestEditChildProfile.dart';
+import 'package:gabha_app1/screens/registration/wrapper/Board.dart';
+import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
+import 'package:gabha_app1/screens/registration/wrapper/ResponseGetAllBoard.dart';
 
 import '../../constant/AppColors.dart';
 import '../../constant/CustomTextFieldWiget.dart';
 import '../../constant/TextRubikRegular.dart';
+import 'wrapper/ResponseUpdateChild.dart';
 
 class ActivityEditChildProfile extends StatefulWidget {
   const ActivityEditChildProfile({Key? key}) : super(key: key);
@@ -20,16 +30,137 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerMobileNum = TextEditingController();
   TextEditingController controllerEmail = TextEditingController();
-  List<String> _board = ['SSC', 'CBSC', 'ICSC', 'IB'];
+ /* List<String> _board = ['SSC', 'CBSC', 'ICSC', 'IB'];
   String? _selectedBoard;
 
   List<String> _classNum = ['1st', '2nd', '3rd', '4th'];
-  String? _selectedClassNum;
+  String? _selectedClassNum;*/
 
   final formKey = GlobalKey<FormState>();
 
+  List<Board>? boardList = [];
+  Core core = Core();
+
+  Board? selectedBoard;
+  String? dropDownBoard = "Select";
+
+  List<Grade>? gradeList = [];
+  Grade? selectedGrade;
+  String? dropDownGrade ;
+
+  @override
+  void initState() {
+    super.initState();
+    controllerName.text="${PreferenceUtils.getString("gabha_user_name")}";
+    controllerEmail.text="${PreferenceUtils.getString("gabha_email")}";
+    controllerMobileNum.text="${PreferenceUtils.getString("gabha_mobile")}";
+
+
+
+   // debugPrint("_______gradeid________${PreferenceUtils.getString("grade_id")}");
+
+
+    onResume();
+  }
+
+  onResume() {
+    getAllBoard();
+
+  }
+
+  void getAllBoard() async {
+    Response<ResponseGetAllBoard> response = await core.getAllBoard();
+    if (response.body?.status?.statusCode == 0) {
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          boardList!.add(value);
+        });
+      });
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          if(value.board == PreferenceUtils.getString("board_full_name")){
+            dropDownBoard = value.board;
+            getAllGradeByBoard("${value.boardId}");
+          }
+        });
+      });
+    }
+  }
+
+  //get all grade by borad
+  void getAllGradeByBoard(String boardId) async {
+    Response<ResponseGetStandard> response = await core.getAllGradeByBoard(boardId);
+    if (response.body?.status?.statusCode == 0) {
+      gradeList =[];
+      Grade defaultGrade = Grade();
+      defaultGrade.gradeId = "";
+      defaultGrade.grade = "Select";
+      gradeList!.add(defaultGrade);
+
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          gradeList!.add(value);
+        });
+      });
+
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          if(value.grade == PreferenceUtils.getString("grade_name")){
+            dropDownGrade = value.grade;
+          }
+
+
+        });
+      });
+    }
+  }
+
+
+  void updateChildUser() async {
+    RequestEditChildProfile requestUserUpdate = RequestEditChildProfile();
+    requestUserUpdate.userId = "${PreferenceUtils.getString("gabha_user_id")}";
+    requestUserUpdate.userName =controllerName.text;
+    requestUserUpdate.mobileNo = controllerMobileNum.text;
+    requestUserUpdate.email = controllerEmail.text;
+
+    if (selectedGrade ==null)
+    {
+      requestUserUpdate.gradeId="${PreferenceUtils.getString("grade_id")}";
+      print(requestUserUpdate.gradeId);
+      print("getttttttttttttt");
+    }else{
+      requestUserUpdate.gradeId = selectedGrade!.gradeId;
+      print(requestUserUpdate.gradeId);
+      print("11111111111getttttttttttttt");
+    }
+
+    print(requestUserUpdate.userId);
+    print(requestUserUpdate.userName);
+    print(requestUserUpdate.mobileNo);
+    print(requestUserUpdate.email);
+    print(requestUserUpdate.gradeId);
+
+
+    Response<ResponseUpdateChild> response = await core.updateChildUser(requestUserUpdate);
+    print(response);
+
+    if (response.body?.status?.statusCode == 0) {
+      setState(() {
+        print("update child successfulllyyyyyyyyyyyyy");
+
+      /*  Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const DashboardScreen()),
+        );*/
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -144,34 +275,35 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
 
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
+                    padding: const EdgeInsets.only(top: 30,left: 15,right: 15),
                     child: TextRubikRegular("Board", "left", 16.0,
                         appColors.hintHeadingColor, false),
                   ),
 
+
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0,left: 20,right: 20),
+                    padding: const EdgeInsets.only(top: 8.0,left: 15,right: 15),
                     child: DropdownButtonFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         disabledBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         errorBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.errorBorder),
+                            BorderSide(color: appColors.errorBorder,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                       ),
                       isExpanded: true,
@@ -180,56 +312,68 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
                       hint: Text(
                         'What board does the school comes under ?',
                         style: TextStyle(
-                            color: appColors.hintHeadingColor, fontSize: 15),
+                            color: appColors.textFieldHintColor, fontSize: 15),
                       ),
-                      value: _selectedBoard,
+                      value: dropDownBoard,
                       onChanged: (newValue) {
-                        setState(() {
-                          _selectedBoard = newValue;
+                        boardList!
+                            .asMap()
+                            .forEach((key, value) {
+
+                          if (value.board == newValue) {
+                            setState(() {
+                              selectedBoard = value;
+                              dropDownBoard = newValue ?? "";
+                            });
+                            //getAllGradeByBoard("${selectedBoard!.boardId}");
+                          }
                         });
                       },
-                      items: _board.map((board) {
+                      items: boardList!.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(board),
-                          value: board,
+                          value: item.board,
+                          child: Text('${item.board}'),
                         );
                       }).toList(),
                       validator: (value) {
-                        if (value == null) return "Please select board";
+                        if (value == "Select") return "Please select board";
                         return null;
                       },
                     ),
                   ),
 
+
+
+
                   Padding(
-                    padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
+                    padding: const EdgeInsets.only(top: 30,left: 15,right: 15),
                     child: TextRubikRegular("Class/ Standard/ Grade", "left",
                         16.0, appColors.hintHeadingColor, false),
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0,left: 20,right: 20),
+                    padding: const EdgeInsets.only(top: 8.0,left: 15,right: 15),
                     child: DropdownButtonFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         disabledBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.mainHeadingColor),
+                            BorderSide(color: appColors.mainHeadingColor,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                         errorBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: appColors.errorBorder),
+                            BorderSide(color: appColors.errorBorder,width: 1.5),
                             borderRadius: BorderRadius.circular(5)),
                       ),
                       isExpanded: true,
@@ -238,27 +382,32 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
                       hint: Text(
                         'What class does your child studies in ?',
                         style: TextStyle(
-                            color: appColors.hintHeadingColor, fontSize: 15),
+                            color: appColors.textFieldHintColor, fontSize: 15),
                       ),
-                      value: _selectedClassNum,
+                      value: dropDownGrade,
                       onChanged: (newValue) {
-                        setState(() {
-                          _selectedClassNum = newValue;
+                        gradeList!.asMap().forEach((key, value) {
+                          if (value.grade == newValue) {
+                            setState(() {
+                              selectedGrade = value;
+                              dropDownGrade = newValue ?? "";
+                            });
+                          }
                         });
                       },
-                      items: _classNum.map((classnum) {
+                      items:
+                      gradeList!.map((item) {
                         return DropdownMenuItem(
-                          child: new Text(classnum),
-                          value: classnum,
+                          value: item.grade,
+                          child: Text('${item.grade}'),
                         );
                       }).toList(),
                       validator: (value) {
-                        if (value == null) return "Please select class";
+                        if (value == "Select") return "Please select grade";
                         return null;
                       },
                     ),
                   ),
-
 
 
 
@@ -287,7 +436,11 @@ class _ActivityEditChildProfileState extends State<ActivityEditChildProfile> {
                           vertical: 18, horizontal: 0),
                       textStyle: const TextStyle(
                           fontSize: 14, color: Colors.white)),
-                  onPressed: () {},
+                  onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            updateChildUser();
+                          }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

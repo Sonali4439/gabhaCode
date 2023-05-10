@@ -19,6 +19,9 @@ class RequestUserUpdate {
   @JsonKey(name:"email")
   String? email;
 
+  @JsonKey(name:"child_grade_id")
+  String? childGradeId;
+
   @JsonKey(name:"mode_of_communication")
   String? modeOfCommunication;
 

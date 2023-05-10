@@ -85,6 +85,14 @@ class _AnnualMembershipScreenState extends State<AnnualMembershipScreen> {
                   builder: (context) => const ActivityChildDetailsList()),
             );
           }
+        if(widget.flag=="childBuy")
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const DashboardScreen()),
+          );
+        }
 
       });
     }

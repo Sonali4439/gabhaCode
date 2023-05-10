@@ -97,7 +97,7 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
     print(requestAddUser.name);
     print(requestAddUser.mobileNo);
     print(requestAddUser.isParent);
-    print(requestAddUser.gradeId);
+    print(requestAddUser.childGradeId);
 
     Response<ResponseLogin> response = await core.addUser(requestAddUser);
 
@@ -135,12 +135,6 @@ class _StudentRegistrationFormState extends State<StudentRegistrationForm> {
           boardList!.add(value);
         });
       });
-     /* if(dropDownBoard != null){
-        gradeList!.asMap().forEach((key, value) {
-          gradeList!.add(value);
-
-        });
-      }*/
     }
   }
 

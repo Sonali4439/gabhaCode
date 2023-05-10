@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gabha_app1/core/Core.dart';
 import 'package:gabha_app1/core/wrapper/ResponseGetStandard.dart';
 import 'package:gabha_app1/screens/home/wrapper/ChildList.dart';
+import 'package:gabha_app1/screens/registration/annualMembershipScreen.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Board.dart';
 import 'package:gabha_app1/screens/registration/wrapper/Grade.dart';
 import 'package:gabha_app1/screens/registration/wrapper/ResponseGetAllBoard.dart';
@@ -64,7 +65,7 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
 
   }
 
-  void getAllBoard() async {
+ /* void getAllBoard() async {
     Response<ResponseGetAllBoard> response = await core.getAllBoard();
     if (response.body?.status?.statusCode == 0) {
       boardList = [];
@@ -102,7 +103,52 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
       });
     }
   }
+*/
+  void getAllBoard() async {
+    Response<ResponseGetAllBoard> response = await core.getAllBoard();
+    if (response.body?.status?.statusCode == 0) {
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          boardList!.add(value);
+        });
+      });
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          if(value.board == "${widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.grade!.board!.board}")
+          {
+            dropDownBoard = value.board;
+            getAllGradeByBoard("${value.boardId}");
+          }
+        });
+      });
+    }
+  }
 
+  //get all grade by borad
+  void getAllGradeByBoard(String boardId) async {
+    Response<ResponseGetStandard> response = await core.getAllGradeByBoard(boardId);
+    if (response.body?.status?.statusCode == 0) {
+      gradeList =[];
+      Grade defaultGrade = Grade();
+      defaultGrade.gradeId = "";
+      defaultGrade.grade = "Select";
+      gradeList!.add(defaultGrade);
+
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          gradeList!.add(value);
+        });
+      });
+
+      setState(() {
+        response.body?.payload?.asMap().forEach((key, value) {
+          if(value.grade ==  "${widget.childList!.child!.userSubscription!.subscriptions!.academicYear!.grade!.grade}"){
+            dropDownGrade = value.grade;
+          }
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +379,14 @@ class _ActivityBuySubcriptionState extends State<ActivityBuySubcription> {
 
                   GestureDetector(
                     onTap: (){
-
+                      print("Successs");
+                      setState(() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnnualMembershipScreen(userId :"${widget.childList!.child!.childId}", flag:"childBuy")),
+                        );
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 5),
